@@ -32,6 +32,9 @@ jobs:
       run: |
         mv target/tronclass-java-1.0-SNAPSHOT.jar tronclass-java-${{ matrix.os }}.jar
         cp config.example.yaml config.yaml
+        mkdir -p tessdata
+        curl -L https://github.com/tesseract-ocr/tessdata/raw/main/eng.traineddata -o tessdata/eng.traineddata
+        jar -cMf tronclass-java-${{ matrix.os }}.zip tronclass-java-${{ matrix.os }}.jar config.yaml tessdata
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
@@ -40,14 +43,13 @@ jobs:
         path: |
           tronclass-java-${{ matrix.os }}.jar
           config.yaml
+          tessdata/
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/') 
       with:
-        files: |
-          tronclass-java-${{ matrix.os }}.jar
-          config.yaml
+        files: tronclass-java-${{ matrix.os }}.zip
         generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

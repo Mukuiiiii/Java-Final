@@ -16,7 +16,7 @@ config:
   enable_log: true
   Senkaku: 30
   retries: 50
-  ocr_path: ''
+  ocr_path: 'tessdata'
   
 operating:
   0:
