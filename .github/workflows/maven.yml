@@ -40,17 +40,29 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: tronclass-java-${{ matrix.os }}
-        path: |
-          tronclass-java-${{ matrix.os }}.jar
-          config.yaml
-          tessdata/
+        name: tronclass-java-${{ matrix.os }}-zip
+        path: tronclass-java-${{ matrix.os }}.zip
 
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v2
-      if: startsWith(github.ref, 'refs/tags/') 
-      with:
-        files: tronclass-java-${{ matrix.os }}.zip
-        generate_release_notes: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          find artifacts -name "*.zip" -exec mv {} . \;
+          
+          gh release create ${{ github.ref_name }} tronclass-java-ubuntu-latest.zip tronclass-java-windows-latest.zip \
+            --target ${{ github.sha }} \
+            --title "TronClass Auto Rollcall ${{ github.ref_name }}" \
+            --notes "gen from ${GITHUB_SHA:0:7}. Ubuntu and Windows jar with tessdata." \
+            --generate-notes
