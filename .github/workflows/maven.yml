@@ -8,7 +8,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v4
@@ -23,8 +27,21 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
+    - name: Rename JAR for specific OS
+      shell: bash
+      run: mv target/tronclass-java-1.0-SNAPSHOT.jar target/tronclass-java-${{ matrix.os }}.jar
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: tronclass-java-jar
-        path: target/tronclass-java-1.0-SNAPSHOT.jar
+        name: tronclass-java-${{ matrix.os }}
+        path: target/tronclass-java-${{ matrix.os }}.jar
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/') # 只有在推送 tag 时才执行此步骤
+      with:
+        files: target/tronclass-java-${{ matrix.os }}.jar
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
