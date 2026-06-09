@@ -1,0 +1,42 @@
+account:
+  user: 'YOUR_STUDENT_ID'
+  passwd: 'YOUR_PASSWORD'
+
+notifications:
+  tg:
+    enable: False
+    key: ''
+    chat: ''
+  dc:
+    enable: False
+    key: ''
+    chat: ''
+
+config:
+  enable_log: true
+  Senkaku: 30
+  retries: 50
+  ocr_path: ''
+  
+operating:
+  0:
+    enable: True
+    range: ["9:00", "17:00"]
+  1:
+    enable: True
+    range: ["9:00", "17:00"]
+  2:
+    enable: True
+    range: ["9:00", "17:00"]
+  3:
+    enable: True
+    range: ["9:00", "17:00"]
+  4:
+    enable: True
+    range: ["9:00", "17:00"]
+  5:
+    enable: False
+    range: ["9:00", "17:00"]
+  6:
+    enable: False
+    range: ["9:00", "17:00"]
