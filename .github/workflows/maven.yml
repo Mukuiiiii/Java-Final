@@ -27,25 +27,27 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: Rename JAR for specific OS
+    - name: Prepare Artifacts
       shell: bash
-      run: mv target/tronclass-java-1.0-SNAPSHOT.jar target/tronclass-java-${{ matrix.os }}.jar
+      run: |
+        mv target/tronclass-java-1.0-SNAPSHOT.jar tronclass-java-${{ matrix.os }}.jar
+        cp config.example.yaml config.yaml
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: tronclass-java-${{ matrix.os }}
         path: |
-          target/tronclass-java-${{ matrix.os }}.jar
-          config.example.yaml
+          tronclass-java-${{ matrix.os }}.jar
+          config.yaml
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
-      if: startsWith(github.ref, 'refs/tags/') # 只有在推送 tag 时才执行此步骤
+      if: startsWith(github.ref, 'refs/tags/') 
       with:
         files: |
-          target/tronclass-java-${{ matrix.os }}.jar
-          config.example.yaml
+          tronclass-java-${{ matrix.os }}.jar
+          config.yaml
         generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
