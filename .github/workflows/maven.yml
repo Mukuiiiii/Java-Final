@@ -35,13 +35,17 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: tronclass-java-${{ matrix.os }}
-        path: target/tronclass-java-${{ matrix.os }}.jar
+        path: |
+          target/tronclass-java-${{ matrix.os }}.jar
+          config.example.yaml
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/') # 只有在推送 tag 时才执行此步骤
       with:
-        files: target/tronclass-java-${{ matrix.os }}.jar
+        files: |
+          target/tronclass-java-${{ matrix.os }}.jar
+          config.example.yaml
         generate_release_notes: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
