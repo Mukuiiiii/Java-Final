@@ -31,3 +31,5 @@ account:
 ```
 
 4. Double click the jar file to run.
+
+![sample](image.png)
