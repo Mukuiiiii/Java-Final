@@ -31,8 +31,8 @@ public class TronUI extends Application {
         primaryStage.setTitle("TronClass Auto Rollcall");
 
         // UI Components
-        startButton = new Button("▶ 開始掛機 (Start)");
-        stopButton = new Button("⏹ 停止 (Stop)");
+        startButton = new Button("▶ 開始掛機");
+        stopButton = new Button("⏹ 停止");
         stopButton.setDisable(true); // initially disabled
         
         statusLabel = new Label("狀態: 等待啟動...");
@@ -52,7 +52,7 @@ public class TronUI extends Application {
         urlField.setPromptText("URL (e.g., /api/...)");
         HBox.setHgrow(urlField, Priority.ALWAYS);
 
-        Button sendApiButton = new Button("送出請求 (Send)");
+        Button sendApiButton = new Button("送出請求");
 
         HBox apiHeader = new HBox(10, methodCombo, urlField, sendApiButton);
         apiHeader.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
