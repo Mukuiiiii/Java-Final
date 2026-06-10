@@ -176,7 +176,6 @@ public class TronUI extends Application {
     private void appendText(String text) {
         Platform.runLater(() -> {
             consoleTextArea.appendText(text);
-            // Auto scroll to bottom happens implicitly with appendText in JavaFX 17+
         });
     }
 
